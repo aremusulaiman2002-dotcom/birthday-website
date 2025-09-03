@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 // CORRECTED Image paths - using .jpeg extension
 const imagePaths = [
@@ -30,18 +31,23 @@ export default function BirthdayPage() {
     { question: "What's that one thing I don't go a day without saying to you?", answer: "i love you" }
   ];
 
-  useEffect(() => {
-    if (currentPage === 'final') {
-      startParticles();
-      // Wait a bit for the carousel to render before starting animation
-      setTimeout(() => {
-        startEndlessCarousel();
-      }, 100);
-      startTypeWriter();
+  const startEndlessCarousel = useCallback(() => {
+    const track = carouselTrackRef.current;
+    if (!track) {
+      // Try again in 100ms if carousel isn't ready
+      setTimeout(startEndlessCarousel, 100);
+      return;
     }
-  }, [currentPage]);
+    
+    // Reset animation
+    track.style.animation = 'none';
+    // Trigger reflow
+    setTimeout(() => {
+      track.style.animation = 'scroll 40s linear infinite';
+    }, 10);
+  }, []);
 
-  const startParticles = () => {
+  const startParticles = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
@@ -51,7 +57,7 @@ export default function BirthdayPage() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let particles: Array<{
+    const particles: Array<{
       x: number;
       y: number;
       radius: number;
@@ -95,25 +101,9 @@ export default function BirthdayPage() {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  };
+  }, []);
 
-  const startEndlessCarousel = () => {
-    const track = carouselTrackRef.current;
-    if (!track) {
-      // Try again in 100ms if carousel isn't ready
-      setTimeout(startEndlessCarousel, 100);
-      return;
-    }
-    
-    // Reset animation
-    track.style.animation = 'none';
-    // Trigger reflow
-    setTimeout(() => {
-      track.style.animation = 'scroll 40s linear infinite';
-    }, 10);
-  };
-
-  const startTypeWriter = () => {
+  const startTypeWriter = useCallback(() => {
     const finalMessageText = "Happy Birthday, Abike ❤️  Omotoriola, Omojadesola, Abike, Imoleayo - The love of my life! I know you might be teary reading this but I am sure it is definitely tears of joy. Every time I think about us, my heart goes back to the very first day we started talking. And in all those days, you've become more than just someone I talk to… you've become the center of my thoughts, the peace in my heart, and the light in my days. Your name Imoleayo 'light of joy.' Mine is Ayo 'joy.' I can't believe how perfectly Allah arranged it, that light and joy would meet, and somehow fit so naturally together. Calling you Abike isn't just me being playful; it's me speaking from a place of love, reminding you that you are someone to be cared for, to be treasured, to be protected forever and always. We love the same things, laugh at the same things, and dream in the same direction. That's not coincidence, Abike. That's connection. And it's why I can say with all my heart: you mean everything to me. If my words make you teary, it's only because they're true. You are my everyday blessing and i thank God every single day i wake for bringing you into my life, Abike the one I don't ever want to lose.💕";
     
     let i = 0;
@@ -134,7 +124,18 @@ export default function BirthdayPage() {
     
     // Start with a slight delay to allow the page to render
     setTimeout(typeWriter, 500);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (currentPage === 'final') {
+      startParticles();
+      // Wait a bit for the carousel to render before starting animation
+      setTimeout(() => {
+        startEndlessCarousel();
+      }, 100);
+      startTypeWriter();
+    }
+  }, [currentPage, startParticles, startEndlessCarousel, startTypeWriter]);
 
   const startQuiz = () => {
     setCurrentPage('quiz');
@@ -283,11 +284,14 @@ export default function BirthdayPage() {
                 {imagePaths.map((img, index) => (
                   <div key={index} className="carousel-item">
                     <div className="image-placeholder">
-                      <img 
+                      <Image 
                         src={img} 
                         alt={`Memory ${index + 1}`}
+                        width={400}
+                        height={600}
                         onError={(e) => {
-                          e.currentTarget.style.display = 'none';
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
                         }}
                       />
                       <div className="fallback-text">Image {index + 1}</div>
@@ -298,11 +302,14 @@ export default function BirthdayPage() {
                 {imagePaths.map((img, index) => (
                   <div key={`dup-${index}`} className="carousel-item">
                     <div className="image-placeholder">
-                      <img 
+                      <Image 
                         src={img} 
                         alt={`Memory ${index + 1}`}
+                        width={400}
+                        height={600}
                         onError={(e) => {
-                          e.currentTarget.style.display = 'none';
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
                         }}
                       />
                       <div className="fallback-text">Image {index + 1}</div>
