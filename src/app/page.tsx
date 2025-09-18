@@ -104,8 +104,16 @@ export default function BirthdayPage() {
   }, []);
 
   const startTypeWriter = useCallback(() => {
-    const finalMessageText = "Happy Birthday, Abike ❤️  Omotoriola, Omojadesola, Abike, Imoleayo - The love of my life! I know you might be teary reading this but I am sure it is definitely tears of joy. Every time I think about us, my heart goes back to the very first day we started talking. And in all those days, you've become more than just someone I talk to… you've become the center of my thoughts, the peace in my heart, and the light in my days. Your name Imoleayo 'light of joy.' Mine is Ayo 'joy.' I can't believe how perfectly Allah arranged it, that light and joy would meet, and somehow fit so naturally together. Calling you Abike isn't just me being playful; it's me speaking from a place of love, reminding you that you are someone to be cared for, to be treasured, to be protected forever and always. We love the same things, laugh at the same things, and dream in the same direction. That's not coincidence, Abike. That's connection. And it's why I can say with all my heart: you mean everything to me. If my words make you teary, it's only because they're true. You are my everyday blessing and i thank God every single day i wake for bringing you into my life, Abike the one I don't ever want to lose.💕";
-    
+    const finalMessageText = `Happy Birthday, Abike ❤️  
+Omotoriola, Omojadesola, Abike, Imoleayo - The love of my life! I know you might be teary reading this but I am sure it is definitely tears of joy. Every time I think about us, my heart goes back to the very first day we started talking. And in all those days, you've become more than just someone I talk to… you've become the center of my thoughts, the peace in my heart, and the light in my days.  
+
+Your name Imoleayo 'light of joy.' Mine is Ayo 'joy', i just know your parents knew it all from start you were going to meet an Ayo definitely and be his Imole. Funny to say my mum actually brought me to the worl but your actually gave me my world (you). I can't believe how perfectly Allah arranged it, that light and joy would meet, and somehow fit so naturally together.  
+
+Calling you Abike isn't just me being playful; it's me speaking from a place of love, reminding you that you are someone to be cared for, to be treasured, to be protected forever and always. We love the same things, laugh at the same things, and dream in the same direction. That's not coincidence, Abike. That's connection!  
+
+And it's why I can say with all my heart: you mean everything to me. If my words make you teary, it's only because they're true. You are my everyday blessing and i thank God every single day i wake for bringing you into my life, Abike the one I don't ever want to lose. 💕`;
+});
+
     let i = 0;
     let currentText = '';
     const speed = 32;
