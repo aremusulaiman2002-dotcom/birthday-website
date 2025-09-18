@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
-// CORRECTED Image paths - using .jpeg extension
+// Image paths
 const imagePaths = [
   '/images/photo1.jpeg',
   '/images/photo2.jpeg', 
@@ -27,21 +27,17 @@ export default function BirthdayPage() {
 
   const questions = [
     { question: "What name do I love calling you?", answer: "abike" },
-    { question: "Which month did we start talking? 😊", answer: "june" },
+    { question: "When exactly did we start talking? 😊", answer: "june" },
     { question: "What's that one thing I don't go a day without saying to you?", answer: "i love you" }
   ];
 
   const startEndlessCarousel = useCallback(() => {
     const track = carouselTrackRef.current;
     if (!track) {
-      // Try again in 100ms if carousel isn't ready
       setTimeout(startEndlessCarousel, 100);
       return;
     }
-    
-    // Reset animation
     track.style.animation = 'none';
-    // Trigger reflow
     setTimeout(() => {
       track.style.animation = 'scroll 40s linear infinite';
     }, 10);
@@ -57,13 +53,7 @@ export default function BirthdayPage() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const particles: Array<{
-      x: number;
-      y: number;
-      radius: number;
-      speed: number;
-      opacity: number;
-    }> = [];
+    const particles: Array<{ x: number; y: number; radius: number; speed: number; opacity: number }> = [];
     
     for (let i = 0; i < 60; i++) {
       particles.push({
@@ -104,15 +94,9 @@ export default function BirthdayPage() {
   }, []);
 
   const startTypeWriter = useCallback(() => {
-    const finalMessageText = `Happy Birthday, Abike ❤️  
-Omotoriola, Omojadesola, Abike, Imoleayo - The love of my life! I know you might be teary reading this but I am sure it is definitely tears of joy. Every time I think about us, my heart goes back to the very first day we started talking. And in all those days, you've become more than just someone I talk to… you've become the center of my thoughts, the peace in my heart, and the light in my days.  
-
-Your name Imoleayo 'light of joy.' Mine is Ayo 'joy', i just know your parents knew it all from start you were going to meet an Ayo definitely and be his Imole. Funny to say my mum actually brought me to the worl but your actually gave me my world (you). I can't believe how perfectly Allah arranged it, that light and joy would meet, and somehow fit so naturally together.  
-
-Calling you Abike isn't just me being playful; it's me speaking from a place of love, reminding you that you are someone to be cared for, to be treasured, to be protected forever and always. We love the same things, laugh at the same things, and dream in the same direction. That's not coincidence, Abike. That's connection!  
-
-And it's why I can say with all my heart: you mean everything to me. If my words make you teary, it's only because they're true. You are my everyday blessing and i thank God every single day i wake for bringing you into my life, Abike the one I don't ever want to lose. 💕`;
-});
+    const finalMessageText = `Happy Birthday, Abike ❤️  Omotoriola, Omojadesola, Abike, Imoleayo - The love of my life! I know you might be teary reading this but I am sure it is definitely tears of joy. Every time I think about us, my heart goes back to the very first day we started talking. And in all those days, you've become more than just someone I talk to… you've become the center of my thoughts, the peace in my heart, and the light in my days. Your name Imoleayo 'light of joy.' Mine is Ayo 'joy', I just know your parents knew it all from start you were going to meet an Ayo definitely and be his Imole. Funny to say my mum actually brought me to the world but you actually gave me my world (you). I can't believe how perfectly Allah arranged it, that light and joy would meet, and somehow fit so naturally together.<br />
+Calling you Abike isn't just me being playful; it's me speaking from a place of love, reminding you that you are someone to be cared for, to be treasured, to be protected forever and always. We love the same things, laugh at the same things, and dream in the same direction. That's not coincidence, Abike. That's connection!<br />
+And it's why I can say with all my heart: you mean everything to me. If my words make you teary, it's only because they're true. You are my everyday blessing and I thank God every single day I wake for bringing you into my life, Abike the one I don't ever want to lose. 💕`;
 
     let i = 0;
     let currentText = '';
@@ -123,31 +107,23 @@ And it's why I can say with all my heart: you mean everything to me. If my words
         currentText += finalMessageText.charAt(i);
         setFinalMessage(currentText);
         i++;
-        
-        // Speed up on spaces
         const delay = finalMessageText.charAt(i-1) === ' ' ? speed / 2 : speed;
         setTimeout(typeWriter, delay);
       }
     };
     
-    // Start with a slight delay to allow the page to render
     setTimeout(typeWriter, 500);
   }, []);
 
   useEffect(() => {
     if (currentPage === 'final') {
       startParticles();
-      // Wait a bit for the carousel to render before starting animation
-      setTimeout(() => {
-        startEndlessCarousel();
-      }, 100);
+      setTimeout(() => startEndlessCarousel(), 100);
       startTypeWriter();
     }
   }, [currentPage, startParticles, startEndlessCarousel, startTypeWriter]);
 
-  const startQuiz = () => {
-    setCurrentPage('quiz');
-  };
+  const startQuiz = () => setCurrentPage('quiz');
 
   const checkAnswer = () => {
     if (answer.toLowerCase().trim() === questions[currentQuestion].answer) {
@@ -163,14 +139,11 @@ And it's why I can say with all my heart: you mean everything to me. If my words
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      checkAnswer();
-    }
+    if (e.key === 'Enter') checkAnswer();
   };
 
   return (
     <div className="birthday-container">
-      {/* Particle Background */}
       <canvas ref={canvasRef} className="particles"></canvas>
 
       <AnimatePresence mode="wait">
@@ -184,36 +157,13 @@ And it's why I can say with all my heart: you mean everything to me. If my words
             transition={{ duration: 0.5 }}
             className="page landing active"
           >
+            {/* Landing content here */}
             <div className="landing-content">
-              <motion.div 
-                className="quiz bounce-in"
-                initial={{ scale: 0.9, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                transition={{ duration: 0.7, type: "spring" }}
-              >
-                <motion.div 
-                  className="cake-icon"
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, -5, 0, 5, 0]
-                  }}
-                  transition={{ 
-                    duration: 2, 
-                    repeat: Infinity,
-                    repeatDelay: 1
-                  }}
-                >
-                  🎂
-                </motion.div>
-                
+              <motion.div className="quiz bounce-in">
+                <motion.div className="cake-icon" animate={{ scale: [1,1.1,1], rotate: [0,-5,0,5,0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}>🎂</motion.div>
                 <h1>Happy Birthday My Love</h1>
                 <p>I have a fun little game for you 💕</p>
-                
-                <p className="instruction-note">
-                  💡 Mind you, passing this game may cause uncontrollable smiling, blushing like never before, 
-                  and maybe tears of joy. Proceed with caution! 💖
-                </p>
-                
+                <p className="instruction-note">💡 Mind you, passing this game may cause uncontrollable smiling, blushing like never before, and maybe tears of joy. Proceed with caution! 💖</p>
                 <div className="instructions">
                   <h3>✨ Instructions ✨</h3>
                   <ul>
@@ -222,15 +172,7 @@ And it's why I can say with all my heart: you mean everything to me. If my words
                     <li><span>3</span>Complete all 3 questions to unlock your surprise 🎉</li>
                   </ul>
                 </div>
-                
-                <motion.button 
-                  onClick={startQuiz}
-                  className="cta-button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Start 🎁
-                </motion.button>
+                <motion.button onClick={startQuiz} className="cta-button" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>Start 🎁</motion.button>
               </motion.div>
             </div>
           </motion.div>
@@ -238,40 +180,14 @@ And it's why I can say with all my heart: you mean everything to me. If my words
 
         {/* Quiz Page */}
         {currentPage === 'quiz' && (
-          <motion.div
-            key="quiz"
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.5 }}
-            className="page quiz-page active"
-          >
+          <motion.div key="quiz" initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -100 }} transition={{ duration: 0.5 }} className="page quiz-page active">
             <div className="quiz" id="quiz-container">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="fade-in-step"
-              >
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="fade-in-step">
                 <h2>Question {currentQuestion + 1}</h2>
                 <p>{questions[currentQuestion].question}</p>
-                <input 
-                  type="text" 
-                  id="answer" 
-                  placeholder="Type your answer..." 
-                  value={answer}
-                  onChange={(e) => setAnswer(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  autoFocus
-                />
+                <input type="text" placeholder="Type your answer..." value={answer} onChange={(e) => setAnswer(e.target.value)} onKeyPress={handleKeyPress} autoFocus />
                 <br />
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={checkAnswer}
-                >
-                  Submit
-                </motion.button>
+                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={checkAnswer}>Submit</motion.button>
               </motion.div>
             </div>
           </motion.div>
@@ -279,47 +195,21 @@ And it's why I can say with all my heart: you mean everything to me. If my words
 
         {/* Final Page */}
         {currentPage === 'final' && (
-          <motion.div
-            key="final"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="page final-page active"
-          >
-            {/* Image Carousel */}
+          <motion.div key="final" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="page final-page active">
             <div className="slideshow-container">
               <div className="carousel-track" ref={carouselTrackRef}>
                 {imagePaths.map((img, index) => (
                   <div key={index} className="carousel-item">
                     <div className="image-placeholder">
-                      <Image 
-                        src={img} 
-                        alt={`Memory ${index + 1}`}
-                        width={400}
-                        height={600}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                        }}
-                      />
+                      <Image src={img} alt={`Memory ${index + 1}`} width={400} height={600} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                       <div className="fallback-text">Image {index + 1}</div>
                     </div>
                   </div>
                 ))}
-                {/* Duplicate for seamless loop */}
                 {imagePaths.map((img, index) => (
                   <div key={`dup-${index}`} className="carousel-item">
                     <div className="image-placeholder">
-                      <Image 
-                        src={img} 
-                        alt={`Memory ${index + 1}`}
-                        width={400}
-                        height={600}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                        }}
-                      />
+                      <Image src={img} alt={`Memory ${index + 1}`} width={400} height={600} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                       <div className="fallback-text">Image {index + 1}</div>
                     </div>
                   </div>
@@ -327,14 +217,10 @@ And it's why I can say with all my heart: you mean everything to me. If my words
               </div>
               <div className="carousel-overlay"></div>
             </div>
-            
-            {/* Final Message */}
             <div className="final-content">
               <div className="final-message-container">
                 <h2 className="final-title">Happy Birthday, My Love! 🎂</h2>
-                <div className="final-message">
-                  {finalMessage}
-                </div>
+                <div className="final-message" dangerouslySetInnerHTML={{ __html: finalMessage }} />
               </div>
             </div>
           </motion.div>
